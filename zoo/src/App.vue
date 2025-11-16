@@ -2,23 +2,31 @@
   <div id="app">
     <div>
       <h1>Animals List</h1>
-      <div id="filtres" class="d-inline-flex flex-column">
+      <div id="filtres" class="d-inline-flex flex-column position-absolute me-5 bg-body-secondary p-4 rounded pt-2 end-0">
+        <h4 class="m-1">Filtres</h4>
         <div>
           <label for="name">Name</label>
-          <input type="text" v-model="data.filters.name" name="name">
+          <input type="text" v-model="data.filters.name" name="name" class="form-control"/>
         </div>
         <div>
           <label for="species">Species</label>
-          <input type="text" v-model="data.filters.species" name="species">
+          <input type="text" v-model="data.filters.species" name="species" class="form-control">
         </div>
         <div >
           <label for="minW">Min weight</label>
-          <input type="number" v-model="data.filters.minWeight" name="minW"/>
+          <input type="number" v-model="data.filters.minWeight" name="minW" class="form-control"/>
         </div>
         <div>
           <label for="maxW">Min weight</label>
-          <input type="number" v-model="data.filters.maxWeight" name="maxW"/>
+          <input type="number" v-model="data.filters.maxWeight" name="maxW" class="form-control"/>
         </div>
+      </div>
+      <div id="parent" class="d-inline-flex flex-column justify-content-center">
+        <animal-card v-for="animal in filtredAnimals" :key="animal.name" class="bg-dark-subtle m-3 p-2 rounded">
+          <template #name><h3>{{ animal.name }}</h3></template>
+          <template #species><p>{{ animal.species }}</p></template>
+          <template #weight>{{ animal.weight }} kg</template>
+        </animal-card>
       </div>
     </div>
   </div>
@@ -28,6 +36,7 @@
 import Vue from 'vue';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Animal from './interfaces/Animal';
+import AnimalCard from './components/AnimalCard';
 
 export default Vue.extend({
   name: 'App',
@@ -92,6 +101,12 @@ export default Vue.extend({
     this.data.filters.maxWeight = this.data.animals.map(w => w.weight).sort((a,b) => a - b)[this.data.animals.length - 1]
   },
   components: {
+    AnimalCard
+  },
+  computed:{
+    filtredAnimals(): Animal[]{
+      return this.data.animals.filter((a: Animal) => a.name.toLowerCase().startsWith(this.data.filters.name.toLowerCase().trim()) && a.species.toLowerCase().startsWith(this.data.filters.species.toLowerCase().trim()) && a.weight > this.data.filters.minWeight && a.weight <= this.data.filters.maxWeight);
+    }
   }
 });
 </script>
@@ -118,6 +133,10 @@ export default Vue.extend({
     min-width: 40%;
     margin-right: auto;
     text-align: left;
-    margin: 2% 0;
+    margin: 4% 0;
+  }
+  #parent
+  {
+    min-width: 17%;
   }
 </style>
