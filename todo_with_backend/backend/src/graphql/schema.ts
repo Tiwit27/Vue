@@ -11,9 +11,9 @@ import { buildSchema } from "graphql";
 // o identycznej nazwie w resolvers.ts
 export const schema = buildSchema(`
     type Todo {
-        id: ID!,
-        title: String!,
-        completed: Boolean!,
+        id: ID!
+        title: String!
+        completed: Boolean!
         created_at: String
     }
 
@@ -22,11 +22,17 @@ export const schema = buildSchema(`
     }
 
     input TodoInput {
-        title: String!,
+        title: String!
         completed: Boolean
+    }
+
+    input TodoUpdateStatusInput {
+        id: ID!
+        completed: Boolean!
     }
 
     type Mutation {
         addTodo(input: TodoInput): Todo
+        updateTodoStatus(input: TodoUpdateStatusInput): Todo
     }
 `)
