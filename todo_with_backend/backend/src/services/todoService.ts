@@ -19,7 +19,7 @@ export const createTodo = async (todo: Todo): Promise<Todo> => {
 
 export const updateTodoStatus = async (todoUpdate: TodoUpdate): Promise<Todo> => {
     const result = await pool.query(
-        "UPDATE todos (completed) VALUES ($1) WHERE id = $2 RETURNING *",
+        "UPDATE todos SET completed = $1 WHERE id = $2 RETURNING *",
         [todoUpdate.completed, todoUpdate.id]
     );
     return result.rows[0];
