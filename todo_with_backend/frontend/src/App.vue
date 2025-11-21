@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class=" d-flex justify-content-center align-items-center">
+    <div class="d-flex justify-content-center align-items-center">
       <h1 class="m-0">Todo List with backend</h1>
       <button class="btn btn-success px-3 py-1 h-100 ms-4" @click="data.addingNewTodo = true"><h4 class="m-0">Add</h4></button>
     </div>
@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <todo-item v-for="todo in data.todos" :key="todo.id" :todo="todo"/>
+        <todo-item v-for="todo in data.todos" :key="todo.id" :todo="todo" @updateStatus="updateStatus($event)"/>
       </tbody>
     </table>
     <div id="addPopUpBackground" v-if="data.addingNewTodo" @click="data.addingNewTodo = false">
@@ -29,7 +29,6 @@
         <button class="btn btn-danger" @click="data.addingNewTodo = false"><h4 class="m-0">Cancel</h4></button>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -74,7 +73,7 @@ export default Vue.extend({
       console.log(response.data.data.todos)
       this.data.todos = response.data.data.todos.map(todo => ({
         ...todo,
-        created_at: todo.created_at ? new Date(Number(todo.created_at)) : undefined
+        created_at: new Date(Number(todo.created_at))
       }));
     },
     async addTodo(){
@@ -95,6 +94,13 @@ export default Vue.extend({
 
       this.data.todos.push(response.data.data.addTodo);
       this.data.addingNewTodo = false;
+    },
+    updateStatus(todo: Todo){
+      const index = this.data.todos.findIndex(t => t.id === todo.id);
+      if(index != -1)
+      {
+        this.$set(this.data.todos, index, todo);
+      }
     }
   },
   mounted(){

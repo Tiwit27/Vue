@@ -1,10 +1,10 @@
 <template>
     <tr class="align-middle">
-        <td>{{ data.todo.id }}</td>
-        <td style="width: 40%;">{{ data.todo.title }}</td>
-        <td style="width: 15%">{{ data.todo.completed ? "Done" : "Todo"}}</td>
-        <td>{{ formatedDate}}</td>
-        <td style="width: 15%"><button class="btn" :class="data.todo.completed ? 'btn-danger' : 'btn-success'" @click="data.todo.completed = !data.todo.completed">{{ data.todo.completed ? "Cancel" : "Mark as done"}}</button></td>
+        <td>{{ todo.id }}</td>
+        <td style="width: 40%;">{{ todo.title }}</td>
+        <td style="width: 15%">{{todoStatusText}}</td>
+        <td style="width: 20%;">{{ formatedDate}}</td>
+        <td style="width: 15%"><button class="btn" :class="todoButtonClass" @click="updateStatus">{{todoButtonText}}</button></td>
         <td><img id="icon" src="../../assets/trash.svg"/></td>
     </tr>
 </template>
@@ -14,6 +14,10 @@
 <style scoped>
 #icon
 {
-    width: 2rem;
+    width: 3.5ch;
+}
+td button
+{
+    min-width: 14ch;
 }
 </style>

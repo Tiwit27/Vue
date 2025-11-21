@@ -11,7 +11,7 @@ import { buildSchema } from "graphql";
 // o identycznej nazwie w resolvers.ts
 export const schema = buildSchema(`
     type Todo {
-        id: ID!
+        id: Int!
         title: String!
         completed: Boolean!
         created_at: String
@@ -27,7 +27,7 @@ export const schema = buildSchema(`
     }
 
     input TodoUpdateStatusInput {
-        id: ID!
+        id: Int!
         completed: Boolean!
     }
 
