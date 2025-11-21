@@ -1,7 +1,7 @@
-import { Todo} from "@/interfaces/Todo";
+import { Todo, UpdateTodoStatus} from "@/interfaces/Todo";
 import Vue, { PropType } from "vue";
 import axios from "axios";
-import dayjs from "dayjs";
+import { Response } from "@/interfaces/Response";
 
 export default Vue.extend({
     props:{
@@ -28,7 +28,7 @@ export default Vue.extend({
             return this.todo.completed ? "Cancel" : "Mark as done";
         },
         formatedDate(): string{
-            return new Date(this.data.todo.created_at).toLocaleString(undefined, {
+            return new Date(this.todo.created_at).toLocaleString(undefined, {
             hour: "2-digit",
             minute: "2-digit",
             day: "2-digit",
@@ -42,22 +42,47 @@ export default Vue.extend({
             const newStatus = !this.data.todo.completed;
             const query = `
                 mutation{
-                    updateTodoStatus(input: {id: ${this.data.todo.id}, completed: ${newStatus}}){
+                    updateTodoStatus(input: {id: ${this.todo.id}, completed: ${newStatus}}){
                         id,
                         completed
                     }
                 }
             `;
 
-            const response = await axios.post<{data: {todo: {id: number, completed: boolean}}}>("http://localhost:3000/graphql",{
+            const response = await axios.post<Response<UpdateTodoStatus>>("http://localhost:3000/graphql",{
+                query: query
+            });
+            if(response.status === 200)
+            {
+                this.data.todo.completed = response.data.data.updateTodoStatus.completed;
+                this.$emit("updateStatus", {...this.data.todo});
+            }
+        },
+        async deleteTodo(){
+            const query = `
+                mutation{
+                    deleteTodo(input: {id: ${this.todo.id}}){
+                        id,
+                        title,
+                        completed,
+                        created_at
+                    }
+                }
+            `
+            const response = await axios.post<Response<Todo>>("http://localhost:3000/graphql",{
                 query: query
             });
 
             if(response.status === 200)
             {
-                this.data.todo.completed = newStatus;
-                this.$emit("updateStatus", {...this.data.todo});
+                this.$emit("deleteTodo", this.todo.id);
             }
+        },
+        updateData(){
+            this.data.todo = this.todo;
         }
+    },
+    mounted(){
+        this.updateData();
     }
 })

@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <todo-item v-for="todo in data.todos" :key="todo.id" :todo="todo" @updateStatus="updateStatus($event)"/>
+        <todo-item v-for="todo in data.todos" :key="todo.id" :todo="todo" @updateStatus="updateStatus($event)" @deleteTodo="deleteTodo($event)"/>
       </tbody>
     </table>
     <div id="addPopUpBackground" v-if="data.addingNewTodo" @click="data.addingNewTodo = false">
@@ -100,6 +100,13 @@ export default Vue.extend({
       if(index != -1)
       {
         this.$set(this.data.todos, index, todo);
+      }
+    },
+    deleteTodo(id: number){
+      const index = this.data.todos.findIndex(t => t.id === id);
+      if(index != -1)
+      {
+        this.$delete(this.data.todos, index);
       }
     }
   },

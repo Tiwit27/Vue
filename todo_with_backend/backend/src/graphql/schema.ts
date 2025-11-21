@@ -31,8 +31,13 @@ export const schema = buildSchema(`
         completed: Boolean!
     }
 
+    input TodoDeleteInput {
+        id: Int!
+    }
+
     type Mutation {
         addTodo(input: TodoInput): Todo
         updateTodoStatus(input: TodoUpdateStatusInput): Todo
+        deleteTodo(input: TodoDeleteInput): Todo
     }
 `)

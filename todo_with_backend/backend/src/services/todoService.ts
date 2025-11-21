@@ -1,5 +1,5 @@
 import pool from "../db";
-import { Todo, TodoUpdate} from "../models/Todo";
+import { Todo, TodoDelete, TodoUpdate} from "../models/Todo";
 
 //service to miejsce w którym znajdują się wszystkie dokładne implementacje metod, a także 
 // bezpośrednia komunikacja z bazą danych przy użyciu SQL
@@ -23,6 +23,14 @@ export const updateTodoStatus = async (todoUpdate: TodoUpdate): Promise<Todo> =>
     const {rows:[row]}= await pool.query(
         "UPDATE todos SET completed = $1 WHERE id = $2 RETURNING *",
         [todoUpdate.completed, todoUpdate.id]
+    );
+    return row;
+}
+
+export const deleteTodo = async (todoDelete: TodoDelete): Promise<Todo> => {
+    const {rows:[row]}= await pool.query(
+        "DELETE FROM todos WHERE id = $1 RETURNING *",
+        [todoDelete.id]
     );
     return row;
 }
