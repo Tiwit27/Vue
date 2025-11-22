@@ -35,6 +35,9 @@ export default Vue.extend({
             month: "2-digit",
             year: "numeric",
             })
+        },
+        imageSrc(): string{
+            return `/priority/${this.todo.priority}.png`;
         }
     },
     methods:{

@@ -3,6 +3,7 @@
         <td>{{ todo.id }}</td>
         <td style="width: 40%;">{{ todo.title }}</td>
         <td style="width: 15%">{{todoStatusText}}</td>
+        <td><img :src="imageSrc"></td>
         <td style="width: 20%;">{{ formatedDate}}</td>
         <td style="width: 15%">
             <button class="btn" :class="todoButtonClass" @click="updateStatus">{{todoButtonText}}</button>
@@ -19,13 +20,14 @@
 #icon
 {
     width: 3.5ch;
+    cursor: pointer;
 }
 td button
 {
     min-width: 14ch;
 }
-td img
+img
 {
-    cursor: pointer;
+    width: 5ch;
 }
 </style>

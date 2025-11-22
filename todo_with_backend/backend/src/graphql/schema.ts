@@ -15,6 +15,7 @@ export const schema = buildSchema(`
         title: String!
         completed: Boolean!
         created_at: String
+        priority: String
     }
 
     type Query {
@@ -23,7 +24,7 @@ export const schema = buildSchema(`
 
     input TodoInput {
         title: String!
-        completed: Boolean
+        priority: String!
     }
 
     input TodoUpdateStatusInput {

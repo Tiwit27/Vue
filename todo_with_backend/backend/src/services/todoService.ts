@@ -12,8 +12,8 @@ export const getAllTodos = async (): Promise<Todo[]> => {
 export const createTodo = async (todo: Todo): Promise<Todo> => {
     //{rows:[row]} -> rows:[pierwszy_element, drugi_element, ...]
     const {rows:[row]} = await pool.query(
-        "INSERT INTO todos (title, completed) VALUES ($1, $2) RETURNING *",
-        [todo.title, todo.completed ?? false]
+        "INSERT INTO todos (title, priority) VALUES ($1, $2) RETURNING *",
+        [todo.title, todo.priority]
     );
     return row;
 }
