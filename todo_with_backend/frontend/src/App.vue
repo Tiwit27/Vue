@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <div class="d-flex justify-content-center align-items-center">
-      <h1 class="m-0">Todo List with backend</h1>
-      <button class="btn btn-success px-3 py-1 h-100 ms-4" @click="data.addingNewTodo = true"><h4 class="m-0">Add</h4></button>
+      <h1 class="m-0 me-2">TODO LIST</h1>
+      <img class="img-icon" src="../public/add.svg" @click="data.addingNewTodo = true"/>
+      <img class="img-icon" src="../public/filter.svg" @click="data.changingFiltres = true"/>
+      <i class="fi fi-rr-filter"></i>
     </div>
     <table class="table table-striped w-50 mx-auto mt-4">
       <thead>
@@ -19,8 +21,8 @@
         <todo-item v-for="todo in sortedTodos" :key="todo.id" :todo="todo" @updateStatus="updateStatus($event)" @deleteTodo="deleteTodo($event)"/>
       </tbody>
     </table>
-    <div id="addPopUpBackground" v-if="data.addingNewTodo" @click="data.addingNewTodo = false">
-      <div id="addPopUp" @click.stop>
+    <div class="PopUpBackground" v-if="data.addingNewTodo" @click="data.addingNewTodo = false">
+      <div class="PopUp" @click.stop>
         <h1>Adding New Todo</h1>
         <div class=" d-flex justify-content-between align-items-center mt-1">
           <label for="title"><h3 class="m-0 me-3">Title</h3></label>
@@ -38,6 +40,47 @@
         <button class="btn btn-danger" @click="data.addingNewTodo = false"><h4 class="m-0">Cancel</h4></button>
       </div>
     </div>
+    <div class="PopUpBackground" v-if="data.changingFiltres" @click="data.changingFiltres = false">
+      <div class="PopUp" @click.stop style="height: 350px;">
+        <h1>Filtres</h1>
+        <div class=" d-flex justify-content-between align-items-center mt-1">
+          <label for="title"><h3 class="m-0 me-3">Title</h3></label>
+          <input type="text" name="title" class="form-control" v-model="data.filtres.title">
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-1">
+          <label for="status" class=""><h3 class="m-0 me-3">Status</h3></label>
+          <div class="d-flex justify-content-center flex-grow-1">
+            <div class="d-flex align-items-center me-2">
+              <input type="checkbox" name="status" value="Todo" v-model="data.filtres.status.todo">
+              <h5 class="m-0 ms-1">Todo</h5>
+            </div>
+            <div class="d-flex align-items-center ms-2">
+              <input type="checkbox" name="status" value="Done" v-model="data.filtres.status.done">
+              <h5 class="m-0 ms-1">Done</h5>
+            </div>
+          </div>
+        </div>
+        <div class=" d-flex justify-content-between align-items-center mt-1">
+          <label for="priority" class=""><h3 class="m-0 me-3">Priority</h3></label>
+          <div class="d-flex justify-content-center flex-grow-1">
+            <div class="d-flex align-items-center me-2">
+              <input type="checkbox" name="status" value="Low" v-model="data.filtres.priority.low">
+              <h5 class="m-0 ms-1">Low</h5>
+            </div>
+            <div class="d-flex align-items-center ms-2">
+              <input type="checkbox" name="status" value="Medium" v-model="data.filtres.priority.medium">
+              <h5 class="m-0 ms-1">Medium</h5>
+            </div>
+            <div class="d-flex align-items-center ms-2">
+              <input type="checkbox" name="status" value="High" v-model="data.filtres.priority.high">
+              <h5 class="m-0 ms-1">High</h5>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-success"><h4 class="m-0">Apply</h4></button>
+        <button class="btn btn-danger"><h4 class="m-0">Cancel</h4></button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -47,7 +90,6 @@ import TodoItem from './components/TodoItem';
 import { Todo } from './interfaces/Todo';
 import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.min.css"
-import { Priority } from './interfaces/Priority';
 
 export default Vue.extend({
   name: 'App',
@@ -61,7 +103,19 @@ export default Vue.extend({
         addingNewTodo: false,
         addingNewTodoInput: "",
         addingNewTodoPriority: "Low",
-        sortingDESC: true
+        changingFiltres: false,
+        filtres: {
+          title: "",
+          status: {
+            done: true,
+            todo: true,
+          },
+          priority:{
+            low: true,
+            medium: true,
+            high: true
+          }
+        }
       }
     }
   },
@@ -143,7 +197,7 @@ export default Vue.extend({
         Low: 1
       };
       return this.data.todos.slice().sort((a: Todo, b: Todo) => priorityOrder[b.priority] - priorityOrder[a.priority])
-    }
+    },
   },
   mounted(){
     this.getTodos();
@@ -160,7 +214,7 @@ export default Vue.extend({
   color: #2c3e50;
   margin-top: 60px;
 }
-#addPopUp 
+.PopUp 
 {
   position: fixed;
   top: 30%;
@@ -176,7 +230,7 @@ export default Vue.extend({
   justify-content: space-between;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
-#addPopUpBackground
+.PopUpBackground
 {
   position: fixed;
   background-color: #00000095;
@@ -186,10 +240,20 @@ export default Vue.extend({
   width: 101%;
   height: 101%;
 }
-#addPopUp input, #addPopUp select{
+.PopUp input, .PopUp select{
   width: 70%;
 }
 #priorityTh{
   cursor: pointer;
+}
+.img-icon
+{
+  cursor: pointer;
+  width: 2.5%;
+  padding: 0.4%;
+  border: #000000 solid 0.4vh;
+  background-color: #198754;
+  border-radius: 25%;
+  margin: 0.5%;
 }
 </style>
