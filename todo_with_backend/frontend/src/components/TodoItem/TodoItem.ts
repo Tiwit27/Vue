@@ -44,8 +44,8 @@ export default Vue.extend({
         async updateStatus(){
             const newStatus = !this.data.todo.completed;
             const query = `
-                mutation{
-                    updateTodoStatus(input: {id: ${this.todo.id}, completed: ${newStatus}}){
+                mutation ($id: Int!, $completed: Boolean!){
+                    updateTodoStatus(input: {id: $id, completed: $completed}){
                         id,
                         completed
                     }
@@ -53,7 +53,11 @@ export default Vue.extend({
             `;
 
             const response = await axios.post<Response<UpdateTodoStatus>>("http://localhost:3000/graphql",{
-                query: query
+                query: query,
+                variables:{
+                    id: this.todo.id,
+                    completed: newStatus
+                }
             });
             if(response.status === 200)
             {
@@ -63,8 +67,8 @@ export default Vue.extend({
         },
         async deleteTodo(){
             const query = `
-                mutation{
-                    deleteTodo(input: {id: ${this.todo.id}}){
+                mutation ($id: Int!){
+                    deleteTodo(input: {id: $id}){
                         id,
                         title,
                         completed,
@@ -73,7 +77,10 @@ export default Vue.extend({
                 }
             `
             const response = await axios.post<Response<Todo>>("http://localhost:3000/graphql",{
-                query: query
+                query: query,
+                variables:{
+                    id: this.todo.id
+                }
             });
 
             if(response.status === 200)

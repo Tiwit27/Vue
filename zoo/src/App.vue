@@ -105,7 +105,11 @@ export default Vue.extend({
   },
   computed:{
     filtredAnimals(): Animal[]{
-      return this.data.animals.filter((a: Animal) => a.name.toLowerCase().startsWith(this.data.filters.name.toLowerCase().trim()) && a.species.toLowerCase().startsWith(this.data.filters.species.toLowerCase().trim()) && a.weight > this.data.filters.minWeight && a.weight <= this.data.filters.maxWeight);
+      return this.data.animals.filter((a: Animal) => 
+        a.name.toLowerCase().startsWith(this.data.filters.name.toLowerCase().trim()) && 
+        a.species.toLowerCase().startsWith(this.data.filters.species.toLowerCase().trim()) && 
+        a.weight > this.data.filters.minWeight && 
+        a.weight <= this.data.filters.maxWeight);
     }
   }
 });

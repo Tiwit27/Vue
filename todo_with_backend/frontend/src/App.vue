@@ -145,8 +145,8 @@ export default Vue.extend({
     },
     async addTodo(){
       const query = `
-        mutation{
-          addTodo(input: {title: "${this.data.addingNewTodoInput.trim()}", priority: "${this.data.addingNewTodoPriority}"}){
+        mutation ($title: String!, $priority: String!){
+          addTodo(input: {title: $title, priority: $priority}){
             id,
             title,
             completed,
@@ -157,7 +157,11 @@ export default Vue.extend({
       `;
 
       const response = await axios.post<{data: {addTodo: Todo}}>("http://localhost:3000/graphql",{
-        query: query
+        query: query,
+        variables:{
+          title: this.data.addingNewTodoInput.trim(),
+          priority: this.data.addingNewTodoPriority
+        }
       });
 
 
